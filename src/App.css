@@ -1,0 +1,23 @@
+body {margin: 0;}
+
+#tooltip {
+ position: fixed;
+ left: 0;
+ top: 0;
+ min-width: 100px;
+ text-align: center;
+ padding:10px 12px;
+ font-family: monospace;
+ background: #FF0000;
+ display: none;
+ opacity: 0;
+ border: 1px solid #ffffff;
+ box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+ transition: opacity 0.25s linear;
+ border-radius: 3px;
+ color: #ffffff;
+}
+
+.hide {
+    display: none;
+}
