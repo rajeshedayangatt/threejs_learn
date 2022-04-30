@@ -21,7 +21,8 @@ class CanvasComponent extends React.Component {
             modalcontent : '' , 
             spinerstatus : true ,  
             buttonTexture : {} , 
-            buttonStatus : "play"
+            buttonStatus : "play",
+            clock :  new THREE.Clock()
         }
     }
 
@@ -30,6 +31,8 @@ class CanvasComponent extends React.Component {
 
         this.initCanvas();
         this.loadModel();
+        this.loadDrone();
+
         this.loadViewPoints();
         this.animate();
     }
@@ -45,9 +48,10 @@ class CanvasComponent extends React.Component {
     initCanvas = () => {
 
         this.totalGroup = new THREE.Group(); 
+        this.droneGroup = new THREE.Group(); 
+
         this.scene = new THREE.Scene()
         this.meshArr =[];
-        this.scene.add(this.totalGroup);
         this.dTime = 0;
         this.dPos = null;
         this.transTime = 50;
@@ -55,12 +59,25 @@ class CanvasComponent extends React.Component {
         this.INTERSECTED = null;
         this.pointer = new THREE.Vector2();
         this.manager = new THREE.LoadingManager();
+        this.drone = [];
+        this.t = 0;
+        this.clock = new THREE.Clock();
+        this.scene.add(this.totalGroup);
+        this.scene.add(this.droneGroup);
+
+        this.droneStartingPositionX = 5.031;
+        this.droneStartingPositionz = 1.240;
+        this.droneStartingPositionY = 0.910
+
+        this.droneStartingRotationY = 0;
+
+        this.dronpos = "";
 
 
         //camera
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
         this.camera.position.set(0.2, 0, 0);
-
+        this.droneWings = [];
         
         //Lighting
         this.hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
@@ -399,9 +416,38 @@ class CanvasComponent extends React.Component {
     }
 
 
-    loadModelClickPoints = () => {
 
 
+    loadDrone = () => {
+
+        //Model Loading
+        this.fbxLoader = new FBXLoader(this.manager )
+        this.fbxLoader.load(
+            '/drone_test.fbx',
+            (object) => {
+
+                object.traverse(
+                    child => {
+                    console.log(child)
+
+                    }
+                )
+                
+               object.scale.set(.04, .04, .04)
+              //  object.position.y = 7
+                
+                this.droneGroup.add(object)
+                this.droneGroup.position.y = this.droneStartingPositionY
+                //this.drone.push(object)
+
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
     }
 
     loadModel = () => {
@@ -455,8 +501,86 @@ class CanvasComponent extends React.Component {
             this.totalGroup.position.z -= this.dPos.z;
         }
 
-       
 
+        const elapsedTime = this.clock.getElapsedTime();
+        const droneMovementAngle = elapsedTime * 0.3;
+
+
+
+        if(this.dronpos == "") {
+
+
+
+
+            this.droneStartingPositionX = this.droneStartingPositionX - 0.02
+            this.droneStartingPositionz = this.droneStartingPositionz + 0.002
+
+
+            if(this.droneStartingPositionX > -4 && this.droneStartingPositionX < -3) {
+
+                this.dronpos = "pos1"
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+            }
+        }
+        
+        if(this.dronpos == "pos1") {
+   
+
+         
+            if(this.droneStartingPositionz > -3 && this.droneStartingPositionz < -2) {
+
+                this.dronpos = "pos2"
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
+            // this.droneStartingPositionX = this.droneStartingPositionX - 0.05
+            this.droneStartingPositionz = this.droneStartingPositionz - 0.02
+        }
+        // if(this.droneGroup.position.x > -2) {
+
+        if(this.dronpos == "pos2") {
+
+
+            if(this.droneStartingPositionX > 2)
+            {
+                this.dronpos = "pos3"
+
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
+            this.droneStartingPositionX = this.droneStartingPositionX + 0.02
+
+        }
+
+
+        if(this.dronpos == "pos3") {
+
+
+
+
+            if(this.droneStartingPositionz > 1 && this.droneStartingPositionz < 3) {
+
+                this.dronpos = ""
+
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
+            this.droneStartingPositionz = this.droneStartingPositionz + 0.02
+
+        }
+
+
+
+        this.droneGroup.position.x = this.droneStartingPositionX 
+        this.droneGroup.position.z =  this.droneStartingPositionz 
+       // this.droneGroup.position.y =   this.droneStartingPositionY 
+        this.droneGroup.rotation.y = Math.sin(droneMovementAngle) * 2
+
+       
+       
+        console.log("posz",this.droneStartingPositionY )
+
+        
         this.renderer.render(this.scene, this.camera)
 
 
