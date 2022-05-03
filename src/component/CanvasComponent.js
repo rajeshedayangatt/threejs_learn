@@ -31,7 +31,7 @@ class CanvasComponent extends React.Component {
 
         this.initCanvas();
         this.loadModel();
-        this.loadDrone();
+       // this.loadDrone();
 
         this.loadViewPoints();
         this.animate();
@@ -65,9 +65,9 @@ class CanvasComponent extends React.Component {
         this.scene.add(this.totalGroup);
         this.scene.add(this.droneGroup);
 
-        this.droneStartingPositionX = 5.031;
-        this.droneStartingPositionz = 1.240;
-        this.droneStartingPositionY = 0.910
+        this.droneStartingPositionX = 50.031;
+        this.droneStartingPositionz = 10.240;
+        this.droneStartingPositionY = 104
 
         this.droneStartingRotationY = 0;
 
@@ -433,13 +433,56 @@ class CanvasComponent extends React.Component {
                     }
                 )
                 
-               object.scale.set(.04, .04, .04)
-              //  object.position.y = 7
+               object.scale.set(.4, .4, .4)
+               object.position.y = this.droneStartingPositionY
                 
-                this.droneGroup.add(object)
-                this.droneGroup.position.y = this.droneStartingPositionY
+               // this.droneGroup.add(object)
+              //  this.droneGroup.position.y = this.droneStartingPositionY
                 //this.drone.push(object)
+                this.droneObj = object
 
+
+
+                let picturespot = new THREE.BoxGeometry(1,1,4)
+                let picturespotmaterial = new THREE.MeshStandardMaterial({color:"red"});
+                let picturespotmesh = new THREE.Mesh(picturespot, picturespotmaterial);
+                picturespotmesh.position.set(-4.501, 2.007, 2.682);
+                picturespotmesh.scale.set(0.600, 0.440, 1.060);
+                picturespotmesh.typeSpot = "wing"
+                this.droneObj.add(picturespotmesh)
+
+                
+                let picturespot1 = new THREE.BoxGeometry(1,1,4)
+                let picturespotmaterial1 = new THREE.MeshStandardMaterial({color:"red"});
+                let picturespotmesh1 = new THREE.Mesh(picturespot1, picturespotmaterial1);
+                picturespotmesh1.position.set(4.449,1.447, -2.528);
+                picturespotmesh1.scale.set(0.600, 0.440, 1.060);
+                picturespotmesh1.typeSpot = "wing"
+                this.droneObj.add(picturespotmesh1)
+
+
+                
+                let picturespot2 = new THREE.BoxGeometry(1,1,4)
+                let picturespotmaterial2 = new THREE.MeshStandardMaterial({color:"red"});
+                let picturespotmesh2 = new THREE.Mesh(picturespot2, picturespotmaterial2);
+                picturespotmesh2.position.set(-4.531,1.447, -2.278);
+                picturespotmesh2.scale.set(0.600, 0.440, 1.060);
+                picturespotmesh2.typeSpot = "wing"
+                this.droneObj.add(picturespotmesh2)
+
+
+                
+                let picturespot3 = new THREE.BoxGeometry(1,1,4)
+                let picturespotmaterial3 = new THREE.MeshStandardMaterial({color:"red"});
+                let picturespotmesh3 = new THREE.Mesh(picturespot3, picturespotmaterial3);
+                picturespotmesh3.position.set(4.269, 2.007, 2.682);
+                picturespotmesh3.scale.set(0.600, 0.440, 1.060);
+                picturespotmesh3.typeSpot = "wing"
+                this.droneObj.add(picturespotmesh3)
+
+
+
+                this.mainModel.add(object)
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -469,7 +512,11 @@ class CanvasComponent extends React.Component {
                 
                 object.scale.set(.02, .02, .02)
                 object.position.y = -1.8
+                this.mainModel = object;
+                
                 this.totalGroup.add(object)
+
+                this.loadDrone();
                 // meshArr.push(object)
     
               },
@@ -510,13 +557,14 @@ class CanvasComponent extends React.Component {
         if(this.dronpos == "") {
 
 
+            this.droneStartingPositionY = this.droneStartingPositionY - 0.05
 
 
-            this.droneStartingPositionX = this.droneStartingPositionX - 0.02
-            this.droneStartingPositionz = this.droneStartingPositionz + 0.002
+            this.droneStartingPositionX = this.droneStartingPositionX - 0.2
+            this.droneStartingPositionz = this.droneStartingPositionz + 0.02
 
 
-            if(this.droneStartingPositionX > -4 && this.droneStartingPositionX < -3) {
+            if(this.droneStartingPositionX > -40 && this.droneStartingPositionX < -30) {
 
                 this.dronpos = "pos1"
                 this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
@@ -527,28 +575,29 @@ class CanvasComponent extends React.Component {
    
 
          
-            if(this.droneStartingPositionz > -3 && this.droneStartingPositionz < -2) {
+            if(this.droneStartingPositionz > -30 && this.droneStartingPositionz < -20) {
 
                 this.dronpos = "pos2"
                 this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
 
             }
-            // this.droneStartingPositionX = this.droneStartingPositionX - 0.05
-            this.droneStartingPositionz = this.droneStartingPositionz - 0.02
+         this.droneStartingPositionY = this.droneStartingPositionY - 0.05
+            this.droneStartingPositionz = this.droneStartingPositionz - 0.2
         }
         // if(this.droneGroup.position.x > -2) {
 
         if(this.dronpos == "pos2") {
 
 
-            if(this.droneStartingPositionX > 2)
+            if(this.droneStartingPositionX > 20)
             {
                 this.dronpos = "pos3"
 
                 this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
 
             }
-            this.droneStartingPositionX = this.droneStartingPositionX + 0.02
+            this.droneStartingPositionX = this.droneStartingPositionX + 0.2
+            this.droneStartingPositionY = this.droneStartingPositionY + 0.05
 
         }
 
@@ -558,27 +607,37 @@ class CanvasComponent extends React.Component {
 
 
 
-            if(this.droneStartingPositionz > 1 && this.droneStartingPositionz < 3) {
+            if(this.droneStartingPositionz > 10 && this.droneStartingPositionz < 30) {
 
                 this.dronpos = ""
 
                 this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
 
             }
-            this.droneStartingPositionz = this.droneStartingPositionz + 0.02
+            this.droneStartingPositionz = this.droneStartingPositionz + 0.2
 
         }
 
+        this.droneObj.traverse(child => {
+            console.log(child)
+
+            if(child.typeSpot === "wing") {
+                child.rotation.y += 0.6
+
+            }
+
+        })
 
 
-        this.droneGroup.position.x = this.droneStartingPositionX 
-        this.droneGroup.position.z =  this.droneStartingPositionz 
-       // this.droneGroup.position.y =   this.droneStartingPositionY 
-        this.droneGroup.rotation.y = Math.sin(droneMovementAngle) * 2
+
+        this.droneObj.position.x = this.droneStartingPositionX 
+        this.droneObj.position.z =  this.droneStartingPositionz 
+      //  this.droneObj.position.y =   this.droneStartingPositionY 
+       this.droneObj.rotation.y = Math.sin(droneMovementAngle) * 2
 
        
        
-        console.log("posz",this.droneStartingPositionY )
+        console.log("posz",this.droneObj )
 
         
         this.renderer.render(this.scene, this.camera)
