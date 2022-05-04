@@ -7,7 +7,6 @@ import { cubeimg } from "../urls";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import Modal from 'react-bootstrap/Modal';
-import Spinner from 'react-bootstrap/Spinner';
 
 
 
@@ -76,6 +75,7 @@ class CanvasComponent extends React.Component {
 
         //camera
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
+        
         this.camera.position.set(0.2, 0, 0);
         this.droneWings = [];
         
@@ -110,13 +110,13 @@ class CanvasComponent extends React.Component {
 
         this.manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
-            console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+           // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
         
         };
         
         this.manager.onLoad = function ( ) {
 
-            console.log( 'Loading complete!');
+            //console.log( 'Loading complete!');
         
         };
         
@@ -146,7 +146,7 @@ class CanvasComponent extends React.Component {
 
             if ( this.INTERSECTED != intersects[0].object ) {
 
-                console.log(this.INTERSECTED)
+                //console.log(this.INTERSECTED)
 
 
                 if ( this.INTERSECTED ){
@@ -159,7 +159,7 @@ class CanvasComponent extends React.Component {
                     this.INTERSECTED = intersects[ 0 ].object;
                     this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
 
-                    if(this.INTERSECTED.typeSpot == "modal_type")  {
+                    if(this.INTERSECTED.typeSpot === "modal_type")  {
 
                         this.INTERSECTED.material.emissive.setHex( 0x0000FF );
 
@@ -174,7 +174,7 @@ class CanvasComponent extends React.Component {
 
                 let pos2D = this.Get2DPos(this.INTERSECTED, window.innerWidth, window.innerHeight, this.camera);
                 
-                if(this.INTERSECTED.typeSpot != "modal_type" && this.INTERSECTED.typeSpot != "button")  {
+                if(this.INTERSECTED.typeSpot !== "modal_type" && this.INTERSECTED.typeSpot !== "button")  {
 
                     $("#tooltip").text(this.INTERSECTED.name)
                     $("#tooltip").css({
@@ -197,7 +197,7 @@ class CanvasComponent extends React.Component {
             if ( this.INTERSECTED ) {
                 
                 this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-                if(this.INTERSECTED.typeSpot == "modal_type")  {
+                if(this.INTERSECTED.typeSpot === "modal_type")  {
                     this.INTERSECTED.visible = false;
 
                 }
@@ -261,12 +261,12 @@ class CanvasComponent extends React.Component {
       
         if (intersects && intersects.object) {
 
-            if(intersects.object.typeSpot == "modal_type")  {
+            if(intersects.object.typeSpot === "modal_type")  {
 
                 this.setState({modalcontent : intersects.object.name})
                 this.showModal();
 
-            }else if(intersects.object.typeSpot == "button"){
+            }else if(intersects.object.typeSpot === "button"){
 
                 if(this.state.buttonStatus === "play") {
 
@@ -285,7 +285,7 @@ class CanvasComponent extends React.Component {
 
 
                   // intersects.object.material.color.setClearColor( "#0000ff" );
-                  console.log(raycaster.intersectObjects( this.meshArr ));
+                  //console.log(raycaster.intersectObjects( this.meshArr ));
                   let posObj = intersects.object.position,
                   posTarget = {x:-posObj.x, z:-posObj.z},
                   posTotal = this.totalGroup.position;
@@ -387,7 +387,7 @@ class CanvasComponent extends React.Component {
 
         this.setState({ buttonTexture : this.textureplay});
 
-        console.log("calledl",this.state.buttonTexture)
+        //console.log("calledl",this.state.buttonTexture)
             
         let buttongeomtery = new THREE.CircleGeometry( 0.5, 32 );
         let buttonmesh = new THREE.Mesh( buttongeomtery, new THREE.MeshPhongMaterial( {map:  new THREE.TextureLoader().load( '/play.png' ) , side: THREE.FrontSide} ) );
@@ -428,12 +428,12 @@ class CanvasComponent extends React.Component {
 
                 object.traverse(
                     child => {
-                    console.log(child)
+                   // console.log(child)
 
                     }
                 )
                 
-               object.scale.set(.4, .4, .4)
+            //   object.scale.set(.4, .4, .4)
                object.position.y = this.droneStartingPositionY
                 
                // this.droneGroup.add(object)
@@ -485,10 +485,10 @@ class CanvasComponent extends React.Component {
                 this.mainModel.add(object)
             },
             (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+               // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             (error) => {
-                console.log(error)
+               // console.log(error)
             }
         )
     }
@@ -503,12 +503,17 @@ class CanvasComponent extends React.Component {
   
                 object.traverse(
                     child => {
-                    console.log(child)
+                   // console.log(child)
     
                     // meshArr.push(child)
     
                     }
                 )
+
+                const vPos = new THREE.Box3().setFromObject(object);
+
+               // console.log("vPos",vPos)
+
                 
                 object.scale.set(.02, .02, .02)
                 object.position.y = -1.8
@@ -521,10 +526,10 @@ class CanvasComponent extends React.Component {
     
               },
               (xhr) => {
-                  console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                 // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
               },
               (error) => {
-                  console.log(error)
+                //  console.log(error)
               }
           )
 
@@ -537,6 +542,7 @@ class CanvasComponent extends React.Component {
     }
 
     renderScene = () => {
+
 
         this.camera.lookAt( 0, 0, 0 );
         this.camera.updateProjectionMatrix()
@@ -552,92 +558,97 @@ class CanvasComponent extends React.Component {
         const elapsedTime = this.clock.getElapsedTime();
         const droneMovementAngle = elapsedTime * 0.3;
 
+        if(this.droneObj) {
+            if(this.dronpos === "") {
 
 
-        if(this.dronpos == "") {
-
-
-            this.droneStartingPositionY = this.droneStartingPositionY - 0.05
-
-
-            this.droneStartingPositionX = this.droneStartingPositionX - 0.2
-            this.droneStartingPositionz = this.droneStartingPositionz + 0.02
-
-
-            if(this.droneStartingPositionX > -40 && this.droneStartingPositionX < -30) {
-
-                this.dronpos = "pos1"
-                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+                this.droneStartingPositionY = this.droneStartingPositionY - 0.05
+    
+    
+                this.droneStartingPositionX = this.droneStartingPositionX - 0.2
+                this.droneStartingPositionz = this.droneStartingPositionz + 0.02
+    
+    
+                if(this.droneStartingPositionX > -40 && this.droneStartingPositionX < -30) {
+    
+                    this.dronpos = "pos1"
+                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+                }
             }
-        }
-        
-        if(this.dronpos == "pos1") {
-   
-
+            
+            if(this.dronpos === "pos1") {
+       
+    
+             
+                if(this.droneStartingPositionz > -30 && this.droneStartingPositionz < -20) {
+    
+                    this.dronpos = "pos2"
+                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+    
+                }
+             this.droneStartingPositionY = this.droneStartingPositionY - 0.05
+                this.droneStartingPositionz = this.droneStartingPositionz - 0.2
+            }
+            // if(this.droneGroup.position.x > -2) {
+    
+            if(this.dronpos === "pos2") {
+    
+    
+                if(this.droneStartingPositionX > 20)
+                {
+                    this.dronpos = "pos3"
+    
+                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+    
+                }
+                this.droneStartingPositionX = this.droneStartingPositionX + 0.2
+                this.droneStartingPositionY = this.droneStartingPositionY + 0.05
+    
+            }
+    
+    
+            if(this.dronpos === "pos3") {
+    
+    
+    
+    
+                if(this.droneStartingPositionz > 10 && this.droneStartingPositionz < 30) {
+    
+                    this.dronpos = ""
+    
+                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+    
+                }
+                this.droneStartingPositionz = this.droneStartingPositionz + 0.2
+    
+            }
+    
+    
+                this.droneObj.traverse(child => {
          
-            if(this.droneStartingPositionz > -30 && this.droneStartingPositionz < -20) {
+                     if(child.typeSpot === "wing") {
+                         child.rotation.y += 0.6
+         
+                     }
+         
+                 })
+         
+    
+    
+    
+    
+            this.droneObj.position.x = this.droneStartingPositionX 
+            this.droneObj.position.z =  this.droneStartingPositionz 
+          //  this.droneObj.position.y =   this.droneStartingPositionY 
+           this.droneObj.rotation.y = Math.sin(droneMovementAngle) * 2
+    
 
-                this.dronpos = "pos2"
-                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-
-            }
-         this.droneStartingPositionY = this.droneStartingPositionY - 0.05
-            this.droneStartingPositionz = this.droneStartingPositionz - 0.2
-        }
-        // if(this.droneGroup.position.x > -2) {
-
-        if(this.dronpos == "pos2") {
-
-
-            if(this.droneStartingPositionX > 20)
-            {
-                this.dronpos = "pos3"
-
-                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-
-            }
-            this.droneStartingPositionX = this.droneStartingPositionX + 0.2
-            this.droneStartingPositionY = this.droneStartingPositionY + 0.05
 
         }
 
-
-        if(this.dronpos == "pos3") {
-
-
-
-
-            if(this.droneStartingPositionz > 10 && this.droneStartingPositionz < 30) {
-
-                this.dronpos = ""
-
-                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-
-            }
-            this.droneStartingPositionz = this.droneStartingPositionz + 0.2
-
-        }
-
-        this.droneObj.traverse(child => {
-            console.log(child)
-
-            if(child.typeSpot === "wing") {
-                child.rotation.y += 0.6
-
-            }
-
-        })
-
-
-
-        this.droneObj.position.x = this.droneStartingPositionX 
-        this.droneObj.position.z =  this.droneStartingPositionz 
-      //  this.droneObj.position.y =   this.droneStartingPositionY 
-       this.droneObj.rotation.y = Math.sin(droneMovementAngle) * 2
-
+        
        
        
-        console.log("posz",this.droneObj )
 
         
         this.renderer.render(this.scene, this.camera)
