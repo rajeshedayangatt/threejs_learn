@@ -5,11 +5,10 @@ import * as THREE from 'three'
 import * as $ from 'jquery'
 import { cubeimg } from "../urls";
 
-import 'bootstrap/dist/css/bootstrap.css';
 import Modal from 'react-bootstrap/Modal';
+import RandomImageComponent from "./RandomImageComponent";
 
-
-
+const droneT = 200, droneS = 1;
 
 class CanvasComponent extends React.Component {
 
@@ -23,6 +22,8 @@ class CanvasComponent extends React.Component {
             buttonStatus : "play",
             clock :  new THREE.Clock()
         }
+
+        //this.changeTexture = changeTexture
     }
 
 
@@ -31,7 +32,7 @@ class CanvasComponent extends React.Component {
         this.initCanvas();
         this.loadModel();
        // this.loadDrone();
-
+     
         this.loadViewPoints();
         this.animate();
     }
@@ -64,9 +65,9 @@ class CanvasComponent extends React.Component {
         this.scene.add(this.totalGroup);
         this.scene.add(this.droneGroup);
 
-        this.droneStartingPositionX = 50.031;
-        this.droneStartingPositionz = 10.240;
-        this.droneStartingPositionY = 104
+        this.droneStartingPositionX = droneT;
+        this.droneStartingPositionZ = droneT;
+        this.droneStartingPositionY = 150;
 
         this.droneStartingRotationY = 0;
 
@@ -75,8 +76,7 @@ class CanvasComponent extends React.Component {
 
         //camera
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
-        
-        this.camera.position.set(0.2, 0, 0);
+        this.camera.position.set(0, 0, -0.2);
         this.droneWings = [];
         
         //Lighting
@@ -99,7 +99,7 @@ class CanvasComponent extends React.Component {
         this.orbitControl.enableDamping = true;
         this.orbitControl.maxDistance = 4; //  this.controls.minDistance = 1;
         this.orbitControl.enablePan = false;
-        this.orbitControl.maxPolarAngle = Math.PI / 2 + 0.4;
+        // this.orbitControl.maxPolarAngle = Math.PI / 2 + 0.4;
 
 
         //world image load
@@ -110,14 +110,10 @@ class CanvasComponent extends React.Component {
 
         this.manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
-           // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-        
         };
         
         this.manager.onLoad = function ( ) {
 
-            //console.log( 'Loading complete!');
-        
         };
         
 
@@ -145,8 +141,6 @@ class CanvasComponent extends React.Component {
         if ( intersects.length > 0 ) {
 
             if ( this.INTERSECTED != intersects[0].object ) {
-
-                //console.log(this.INTERSECTED)
 
 
                 if ( this.INTERSECTED ){
@@ -285,7 +279,6 @@ class CanvasComponent extends React.Component {
 
 
                   // intersects.object.material.color.setClearColor( "#0000ff" );
-                  //console.log(raycaster.intersectObjects( this.meshArr ));
                   let posObj = intersects.object.position,
                   posTarget = {x:-posObj.x, z:-posObj.z},
                   posTotal = this.totalGroup.position;
@@ -294,18 +287,74 @@ class CanvasComponent extends React.Component {
                       x: (posTotal.x - posTarget.x)/this.transTime,
                       z:(posTotal.z - posTarget.z)/ this.transTime
                   };
-
-
-
-
             }
-
-      
         }
-      
-
-    
       }
+
+    loadTexturePlanes = () => {
+
+        let geometry = new THREE.PlaneGeometry( 1, 1 );
+        let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide} );
+        let plane = new THREE.Mesh( geometry, material );
+        plane.position.set(429.000, 155.150, -84.230);
+        plane.rotation.set(0,-1.373,0) 
+        plane.scale.set(120.880, 256.800, 6.900);
+        plane.visible = false
+        plane.name = "texureplane_01"
+
+
+        
+        let geometry1 = new THREE.PlaneGeometry( 1, 1 );
+        let material1 = new THREE.MeshBasicMaterial( {side: THREE.DoubleSide} );
+        let plane1 = new THREE.Mesh( geometry1, material1 );
+        plane1.position.set(362.350, 155.890, -240.580);
+        plane1.rotation.set(-3.142,0.995,-3.142) 
+        plane1.scale.set(125.960, 254.570, 6.900);
+        plane1.name = "texureplane_02"
+        plane1.visible = false
+
+        let geometry2 = new THREE.PlaneGeometry( 1, 1 );
+        let material2 = new THREE.MeshBasicMaterial( {side: THREE.DoubleSide} );
+        let plane2 = new THREE.Mesh( geometry2, material2 );
+        plane2.position.set(242.270, 140.430, -365.640);
+        plane2.rotation.set(3.141,0.585,3.141) 
+        plane2.scale.set(125.960, 288.760, 6.900);
+        plane2.name = "texureplane_03"
+        plane2.visible = false
+
+
+        let geometry3 = new THREE.PlaneGeometry( 1, 1 );
+        let material3 = new THREE.MeshBasicMaterial( {side: THREE.DoubleSide} );
+        let plane3 = new THREE.Mesh( geometry3, material3 );
+        plane3.position.set(85.070, 155.730, -426.490);
+        plane3.rotation.set(3.141,0.145,3.141) 
+        plane3.scale.set(125.960, 254.570, 6.900);
+        plane3.name = "texureplane_04"
+        plane3.visible = false
+
+
+        
+        let geometry4 = new THREE.PlaneGeometry( 1, 1 );
+        let material4 = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide} );
+        let plane4 = new THREE.Mesh( geometry4, material4 );
+        plane4.position.set(-83.200, 155.730, -426.490);
+        plane4.rotation.set(3.141,-0.135,3.141) 
+        plane4.scale.set(125.960, 254.570, 6.900);
+        plane4.name = "texureplane_05"
+        plane4.visible = false
+
+        this.mainModel.add(plane)
+        this.mainModel.add(plane1)
+        this.mainModel.add(plane2)
+        this.mainModel.add(plane3)
+        this.mainModel.add(plane4)
+
+        // this.meshArr.push(plane)
+        // this.totalGroup.add( plane );
+
+
+       /// scene.add( plane );
+    }
 
     loadViewPoints = () => {
 
@@ -387,8 +436,6 @@ class CanvasComponent extends React.Component {
 
         this.setState({ buttonTexture : this.textureplay});
 
-        //console.log("calledl",this.state.buttonTexture)
-            
         let buttongeomtery = new THREE.CircleGeometry( 0.5, 32 );
         let buttonmesh = new THREE.Mesh( buttongeomtery, new THREE.MeshPhongMaterial( {map:  new THREE.TextureLoader().load( '/play.png' ) , side: THREE.FrontSide} ) );
         buttonmesh.name = "button"
@@ -426,19 +473,10 @@ class CanvasComponent extends React.Component {
             '/drone_test.fbx',
             (object) => {
 
-                object.traverse(
-                    child => {
-                   // console.log(child)
-
-                    }
-                )
+               object.scale.set(5, 5, 5)
+               object.position.set(this.droneStartingPositionX, this.droneStartingPositionY, this.droneStartingPositionZ);
+               console.log(object);
                 
-            //   object.scale.set(.4, .4, .4)
-               object.position.y = this.droneStartingPositionY
-                
-               // this.droneGroup.add(object)
-              //  this.droneGroup.position.y = this.droneStartingPositionY
-                //this.drone.push(object)
                 this.droneObj = object
 
 
@@ -482,10 +520,10 @@ class CanvasComponent extends React.Component {
 
 
 
-                this.mainModel.add(object)
+                this.mainModel.add(this.droneObj) // object
             },
             (xhr) => {
-               // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
             },
             (error) => {
                // console.log(error)
@@ -501,32 +539,19 @@ class CanvasComponent extends React.Component {
               '/Holland_FBX_V010.fbx',
               (object) => {
   
-                object.traverse(
-                    child => {
-                   // console.log(child)
-    
-                    // meshArr.push(child)
-    
-                    }
-                )
-
-                const vPos = new THREE.Box3().setFromObject(object);
-
-               // console.log("vPos",vPos)
-
-                
                 object.scale.set(.02, .02, .02)
                 object.position.y = -1.8
                 this.mainModel = object;
                 
-                this.totalGroup.add(object)
+                this.totalGroup.add(this.mainModel)
 
                 this.loadDrone();
+                this.loadTexturePlanes();
                 // meshArr.push(object)
     
               },
               (xhr) => {
-                 // console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                //   console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
               },
               (error) => {
                 //  console.log(error)
@@ -555,105 +580,178 @@ class CanvasComponent extends React.Component {
         }
 
 
-        const elapsedTime = this.clock.getElapsedTime();
-        const droneMovementAngle = elapsedTime * 0.3;
 
-        if(this.droneObj) {
-            if(this.dronpos === "") {
+        if(this.dronpos == "") {
 
 
-                this.droneStartingPositionY = this.droneStartingPositionY - 0.05
-    
-    
-                this.droneStartingPositionX = this.droneStartingPositionX - 0.2
-                this.droneStartingPositionz = this.droneStartingPositionz + 0.02
-    
-    
-                if(this.droneStartingPositionX > -40 && this.droneStartingPositionX < -30) {
-    
-                    this.dronpos = "pos1"
-                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-                }
-            }
-            
-            if(this.dronpos === "pos1") {
-       
-    
-             
-                if(this.droneStartingPositionz > -30 && this.droneStartingPositionz < -20) {
-    
-                    this.dronpos = "pos2"
-                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-    
-                }
-             this.droneStartingPositionY = this.droneStartingPositionY - 0.05
-                this.droneStartingPositionz = this.droneStartingPositionz - 0.2
-            }
-            // if(this.droneGroup.position.x > -2) {
-    
-            if(this.dronpos === "pos2") {
-    
-    
-                if(this.droneStartingPositionX > 20)
-                {
-                    this.dronpos = "pos3"
-    
-                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-    
-                }
-                this.droneStartingPositionX = this.droneStartingPositionX + 0.2
-                this.droneStartingPositionY = this.droneStartingPositionY + 0.05
-    
-            }
-    
-    
-            if(this.dronpos === "pos3") {
-    
-    
-    
-    
-                if(this.droneStartingPositionz > 10 && this.droneStartingPositionz < 30) {
-    
-                    this.dronpos = ""
-    
-                    this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
-    
-                }
-                this.droneStartingPositionz = this.droneStartingPositionz + 0.2
-    
-            }
-    
-    
-                this.droneObj.traverse(child => {
-         
-                     if(child.typeSpot === "wing") {
-                         child.rotation.y += 0.6
-         
-                     }
-         
-                 })
-         
-    
-    
-    
-    
-            this.droneObj.position.x = this.droneStartingPositionX 
-            this.droneObj.position.z =  this.droneStartingPositionz 
-          //  this.droneObj.position.y =   this.droneStartingPositionY 
-           this.droneObj.rotation.y = Math.sin(droneMovementAngle) * 2
-    
+          //  this.droneStartingPositionY = this.droneStartingPositionY - 0.05
+            this.droneStartingPositionX = this.droneStartingPositionX - droneS
+            this.droneStartingPositionZ = this.droneStartingPositionZ + 0.02
 
+
+            if(this.droneStartingPositionX <= -droneT) {
+
+                this.dronpos = "pos1"
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+            }
+        }
+        
+        if(this.dronpos == "pos1") {
+   
+         //   this.droneStartingPositionY = this.droneStartingPositionY - 0.05
+            this.droneStartingPositionZ = this.droneStartingPositionZ - droneS
+         
+            if(this.droneStartingPositionZ <= -droneT) {
+
+                this.dronpos = "pos2"
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
+        }
+
+        if(this.dronpos == "pos2") {
+
+            this.droneStartingPositionX = this.droneStartingPositionX + droneS
+           // this.droneStartingPositionY = this.droneStartingPositionY + 0.05
+
+            if(this.droneStartingPositionX >= droneT)
+            {
+                this.dronpos = "pos3"
+
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
 
         }
 
-        
-       
-       
 
-        
+        if(this.dronpos == "pos3") {
+
+
+            this.droneStartingPositionZ = this.droneStartingPositionZ + droneS
+
+            if(this.droneStartingPositionZ >= droneT) {
+
+                this.dronpos = ""
+
+                this.droneStartingRotationY = this.droneStartingRotationY +  Math.PI  * 1
+
+            }
+
+        }
+
+        if (this.droneObj) {
+            this.droneObj.traverse(child => {
+                if(child.typeSpot === "wing") {
+                    child.rotation.y += 0.6
+                }
+            })
+            this.droneObj.position.set(this.droneStartingPositionX, this.droneStartingPositionY, this.droneStartingPositionZ);
+            this.droneObj.rotation.y += 0.003;
+
+           // console.log("pos",this.droneObj.position)
+        }
+
+
+          
         this.renderer.render(this.scene, this.camera)
 
 
+    }
+
+    changeTexture = (link) =>{
+
+
+  
+
+        this.mainModel.traverse(child => {
+    
+            if(child.name === "texureplane_01") {
+
+                const random_texure = new THREE.TextureLoader().load( link );
+                random_texure.wrapS = THREE.RepeatWrapping;
+                random_texure.wrapT = THREE.RepeatWrapping;
+                random_texure.repeat.set( 2, 1 );
+    
+                child.material.map = random_texure
+                child.material.needsUpdate=true;
+                child.geometry.uvsNeedUpdate = true;
+                child.material.repeat = 4;
+                child.visible = true
+
+                child.needsUpdate=true;
+
+                console.log(child)
+    
+            }
+
+            if(child.name === "texureplane_02") {
+     
+                const random_texure2 = new THREE.TextureLoader().load( link );
+                random_texure2.wrapS = THREE.RepeatWrapping;
+                random_texure2.wrapT = THREE.RepeatWrapping;
+                random_texure2.repeat.set( 1, 2 );
+
+
+                child.material.map = random_texure2
+                child.material.needsUpdate=true;
+                child.geometry.uvsNeedUpdate = true;
+                child.needsUpdate=true;
+                child.visible = true
+
+                console.log(child)
+    
+            }
+
+            if(child.name === "texureplane_03") {
+                const random_texure3 = new THREE.TextureLoader().load( link );
+                random_texure3.wrapS = THREE.RepeatWrapping;
+                random_texure3.wrapT = THREE.RepeatWrapping;
+                random_texure3.offset.set( 0, 0.5 );
+
+                child.material.map = random_texure3
+                child.material.needsUpdate=true;
+                child.geometry.uvsNeedUpdate = true;
+                child.needsUpdate=true;
+                child.visible = true
+
+                console.log(child)
+    
+            }
+
+
+            if(child.name === "texureplane_04") {
+                const random_texure4 = new THREE.TextureLoader().load( link );
+
+                child.material.map = random_texure4
+                child.material.needsUpdate=true;
+                child.geometry.uvsNeedUpdate = true;
+                child.needsUpdate=true;
+                child.visible = true
+
+                console.log(child)
+    
+            }
+
+            if(child.name === "texureplane_05") {
+                const random_texure5 = new THREE.TextureLoader().load( link );
+                random_texure5.wrapS = THREE.RepeatWrapping;
+                random_texure5.wrapT = THREE.RepeatWrapping;
+                random_texure5.offset.set( 0.5, 0 );
+                
+                child.material.map = random_texure5
+
+                child.visible = true
+
+                child.material.needsUpdate=true;
+                child.geometry.uvsNeedUpdate = true;
+                child.needsUpdate=true;
+                console.log(child)
+    
+            }
+        })
+    
+    
     }
     render() {
         return(
@@ -668,6 +766,7 @@ class CanvasComponent extends React.Component {
                     <source src="/small_test_0.mp4" type="video/mp4"/>
                 </video>
                {/* <vedio width="320" height="240" src="/small_test_0.mp4"></vedio> */}
+               <RandomImageComponent changeTextureEvent={this.changeTexture} />
                <Modal show={this.state.show} onHide={this.hideModal}>
                     <Modal.Header closeButton>
                     <Modal.Title>Modal Spot</Modal.Title>
