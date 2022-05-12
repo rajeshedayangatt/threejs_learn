@@ -4,9 +4,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as THREE from 'three'
 import * as $ from 'jquery'
 import { cubeimg } from "../urls";
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 import Modal from 'react-bootstrap/Modal';
 import RandomImageComponent from "./RandomImageComponent";
+import RandomTextComponent from "./RandomTextComponent";
 
 const droneT = 200, droneS = 1;
 
@@ -20,7 +23,12 @@ class CanvasComponent extends React.Component {
             spinerstatus : true ,  
             buttonTexture : {} , 
             buttonStatus : "play",
-            clock :  new THREE.Clock()
+            clock :  new THREE.Clock(),
+            text1 : 'Text1',
+            text2 : 'Text2',
+            text3 : 'Text3',
+            text4 : 'Text4',
+            text5 : 'Text5',
         }
 
         //this.changeTexture = changeTexture
@@ -32,9 +40,121 @@ class CanvasComponent extends React.Component {
         this.initCanvas();
         this.loadModel();
        // this.loadDrone();
-     
         this.loadViewPoints();
         this.animate();
+
+    }
+
+
+    createText = () => {
+
+        let materials = [
+					new THREE.MeshPhongMaterial( { color: 'red', flatShading: true } ), // front
+					new THREE.MeshPhongMaterial( { color: 'red' } ) // side
+				];
+
+
+        let textGeo = new TextGeometry( "Three js", {
+            font: this.fontvar,
+            size: 80,
+            height: 5,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 10,
+            bevelSize: 8,
+            bevelOffset: 0,
+            bevelSegments: 5
+
+        } );
+
+
+        let textMesh1 = new THREE.Mesh( textGeo, new THREE.MeshPhongMaterial( { color: 'red', flatShading: true } ) );
+
+        // textMesh1.position.x = 0.6;
+        // textMesh1.position.y = 0.4;
+        // textMesh1.position.z = 0;
+        // textMesh1.rotation.x = 0;
+        // textMesh1.rotation.y = Math.PI * 2;
+
+        textMesh1.scale.set(0.2,0.2,0.2)
+        console.log(this.totalGroup)
+
+        this.totalGroup.add( textMesh1 );
+    }
+
+    loadText = () => {
+
+
+        const loader = new FontLoader();
+
+        const fonts = loader.load('font.json', ( response ) => {
+
+                this.fontvar = response
+                const fontobj = {
+                    font: this.fontvar,
+                    size: 80,
+                    height: 25,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 2,
+                    bevelSize: 1,
+                    bevelOffset: 2,
+                    bevelSegments: 5
+        
+                }
+
+                let textMesh5 = new THREE.Mesh( new TextGeometry( "text5", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                textMesh5.name = "text5"
+                textMesh5.position.set(-123.810,262.650,-427.920)
+                textMesh5.rotation.set(0,0.220,-0.010)
+                textMesh5.scale.set(0.18,0.18,0.18)
+                textMesh5.type = "text_content"
+                this.mainModel.add( textMesh5 );
+
+
+                let textMesh4 = new THREE.Mesh( new TextGeometry( "text4", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                textMesh4.name = "text4"
+                textMesh4.position.set(60.190,257.900,-427.920)
+                textMesh4.rotation.set(0.080,-0.040,0.040)
+                textMesh4.scale.set(0.18,0.18,0.18)
+                textMesh4.type = "text_content"
+                this.mainModel.add( textMesh4 );
+
+                let textMesh3 = new THREE.Mesh( new TextGeometry( "text3", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                textMesh3.name = "text3"
+                textMesh3.position.set(211.410,262.890,-389.250)
+                textMesh3.rotation.set(0,-0.540,0.030)
+                textMesh3.scale.set(0.18,0.18,0.18)
+                textMesh3.type = "text_content"
+                this.mainModel.add( textMesh3 );
+
+                let textMesh2 = new THREE.Mesh( new TextGeometry( "text2", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                textMesh2.name = "text2"
+                textMesh2.position.set(332.010,255.460,-274.350)
+                textMesh2.rotation.set(0.020,-0.820,0.070)
+                textMesh2.scale.set(0.18,0.18,0.18)
+                textMesh2.type = "text_content"
+
+                this.mainModel.add( textMesh2 );
+
+                let textMesh1 = new THREE.Mesh( new TextGeometry( "text1", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                textMesh1.name = "text1"
+                textMesh1.position.set(408.260,252.340,-113.220)
+                textMesh1.rotation.set(0.120,-1.150,0.210)
+                textMesh1.scale.set(0.18,0.18,0.18)
+                this.mainModel.add( textMesh1 );
+                textMesh1.type = "text_content"
+                this.mainModel.add( textMesh1 );
+
+                this.textGroup.push(textMesh1)
+                this.textGroup.push(textMesh2)
+                this.textGroup.push(textMesh3)
+                this.textGroup.push(textMesh4)
+                this.textGroup.push(textMesh5)
+
+            },
+    
+        );
     }
 
     showModal = () => {
@@ -49,6 +169,7 @@ class CanvasComponent extends React.Component {
 
         this.totalGroup = new THREE.Group(); 
         this.droneGroup = new THREE.Group(); 
+        this.textGroup = []
 
         this.scene = new THREE.Scene()
         this.meshArr =[];
@@ -72,7 +193,7 @@ class CanvasComponent extends React.Component {
         this.droneStartingRotationY = 0;
 
         this.dronpos = "";
-
+        this.fontvar = null;
 
         //camera
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
@@ -301,7 +422,7 @@ class CanvasComponent extends React.Component {
         plane.scale.set(120.880, 256.800, 6.900);
         plane.visible = false
         plane.name = "texureplane_01"
-
+        
 
         
         let geometry1 = new THREE.PlaneGeometry( 1, 1 );
@@ -547,6 +668,8 @@ class CanvasComponent extends React.Component {
 
                 this.loadDrone();
                 this.loadTexturePlanes();
+                this.loadText();
+                
                 // meshArr.push(object)
     
               },
@@ -659,10 +782,88 @@ class CanvasComponent extends React.Component {
 
     }
 
+
+    changeTextUpdate = (val,type) => {
+
+        const fontobj = {
+            font: this.fontvar,
+            size: 80,
+            height: 25,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 2,
+            bevelSize: 1,
+            bevelOffset: 2,
+            bevelSegments: 5
+
+        }
+
+        this.mainModel.traverse(child => {
+
+
+            if(child.type === "text_content") {
+
+                 console.log("child.name",child.type)
+
+                if( child.name ===type) {
+
+                    
+
+                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    updatedgeometry.computeBoundingBox();
+                    child.geometry = updatedgeometry
+    
+    
+                }
+    
+                if( child.name === type) {
+    
+
+
+                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    updatedgeometry.computeBoundingBox();
+                    child.geometry = updatedgeometry
+
+
+                }
+    
+                if( child.name === type) {
+
+                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    updatedgeometry.computeBoundingBox();
+                    child.geometry = updatedgeometry
+    
+                    
+                }
+    
+                if( child.name === type) {
+    
+
+                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    updatedgeometry.computeBoundingBox();
+                    child.geometry = updatedgeometry
+    
+                }
+    
+                if( child.name === type) {
+
+                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    updatedgeometry.computeBoundingBox();
+                    child.geometry = updatedgeometry
+    
+    
+                }
+
+
+            }
+           
+        })
+    }
+
     changeTexture = (link) =>{
 
 
-  
+
 
         this.mainModel.traverse(child => {
     
@@ -766,7 +967,8 @@ class CanvasComponent extends React.Component {
                     <source src="/small_test_0.mp4" type="video/mp4"/>
                 </video>
                {/* <vedio width="320" height="240" src="/small_test_0.mp4"></vedio> */}
-               <RandomImageComponent changeTextureEvent={this.changeTexture} />
+               {/* <RandomImageComponent changeTextureEvent={this.changeTexture} /> */}
+               <RandomTextComponent changeTextureEvent={this.changeTextUpdate}  />
                <Modal show={this.state.show} onHide={this.hideModal}>
                     <Modal.Header closeButton>
                     <Modal.Title>Modal Spot</Modal.Title>
