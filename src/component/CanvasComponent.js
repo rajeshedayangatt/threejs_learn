@@ -115,15 +115,6 @@ class CanvasComponent extends React.Component {
                     textmeshgroup.rotation.y = -1.4 + index * 0.4;
                     textmeshgroup.scale.set(0.18,0.18,0.18)
 
-                    if(val.name === "texureplane_03") {
-
-                        textmeshgroup.position.set(val.position.x,(val.position.y + 122),val.position.z)
-
-                    }else{
-
-                        textmeshgroup.position.set(val.position.x ,(val.position.y + 105),val.position.z)
-
-                    }
 
                     if(val.name === "texureplane_01") {
 
