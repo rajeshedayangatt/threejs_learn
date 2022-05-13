@@ -103,54 +103,129 @@ class CanvasComponent extends React.Component {
         
                 }
 
-                let textMesh5 = new THREE.Mesh( new TextGeometry( "text5", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                textMesh5.name = "text5"
-                textMesh5.position.set(-123.810,262.650,-427.920)
-                textMesh5.rotation.set(0,0.220,-0.010)
-                textMesh5.scale.set(0.18,0.18,0.18)
-                textMesh5.type = "text_content"
-                this.mainModel.add( textMesh5 );
 
 
-                let textMesh4 = new THREE.Mesh( new TextGeometry( "text4", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                textMesh4.name = "text4"
-                textMesh4.position.set(60.190,257.900,-427.920)
-                textMesh4.rotation.set(0.080,-0.040,0.040)
-                textMesh4.scale.set(0.18,0.18,0.18)
-                textMesh4.type = "text_content"
-                this.mainModel.add( textMesh4 );
+                this.planeArr.forEach((val,index) => {
 
-                let textMesh3 = new THREE.Mesh( new TextGeometry( "text3", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                textMesh3.name = "text3"
-                textMesh3.position.set(211.410,262.890,-389.250)
-                textMesh3.rotation.set(0,-0.540,0.030)
-                textMesh3.scale.set(0.18,0.18,0.18)
-                textMesh3.type = "text_content"
-                this.mainModel.add( textMesh3 );
+                    console.log(val.name)
 
-                let textMesh2 = new THREE.Mesh( new TextGeometry( "text2", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                textMesh2.name = "text2"
-                textMesh2.position.set(332.010,255.460,-274.350)
-                textMesh2.rotation.set(0.020,-0.820,0.070)
-                textMesh2.scale.set(0.18,0.18,0.18)
-                textMesh2.type = "text_content"
+                    let textmeshgroup = new THREE.Group()
+                    let textmeshgeometry = new TextGeometry( "text"+index, fontobj )
+                    let textMesh = new THREE.Mesh(textmeshgeometry , new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                    textmeshgroup.rotation.y = -1.4 + index * 0.4;
+                    textmeshgroup.scale.set(0.18,0.18,0.18)
 
-                this.mainModel.add( textMesh2 );
+                    if(val.name === "texureplane_03") {
 
-                let textMesh1 = new THREE.Mesh( new TextGeometry( "text1", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                textMesh1.name = "text1"
-                textMesh1.position.set(408.260,252.340,-113.220)
-                textMesh1.rotation.set(0.120,-1.150,0.210)
-                textMesh1.scale.set(0.18,0.18,0.18)
-                this.mainModel.add( textMesh1 );
-                textMesh1.type = "text_content"
-                this.mainModel.add( textMesh1 );
+                        textmeshgroup.position.set(val.position.x,(val.position.y + 122),val.position.z)
 
-                this.textGroup.push(textMesh1)
-                this.textGroup.push(textMesh2)
-                this.textGroup.push(textMesh3)
-                this.textGroup.push(textMesh4)
-                this.textGroup.push(textMesh5)
+                    }else{
+
+                        textmeshgroup.position.set(val.position.x ,(val.position.y + 105),val.position.z)
+
+                    }
+
+                    if(val.name === "texureplane_01") {
+
+                        textmeshgroup.position.set(val.position.x ,(val.position.y + 105),(val.position.z  - 20))
+
+                    }
+
+                    if(val.name === "texureplane_02") {
+
+                        textmeshgroup.position.set(362.350 ,263.580,-262.490)
+
+                    }
+
+                    if(val.name === "texureplane_03") {
+
+                        textmeshgroup.position.set(229.470,263.240,-378.000)
+
+                    }
+
+                    if(val.name === "texureplane_04") {
+
+                        textmeshgroup.position.set(62.700,259.570,-426.490)
+
+                    }
+
+                    if(val.name === "texureplane_05") {
+
+                        textmeshgroup.position.set(-106.810,260.730,-426.490)
+
+                    }
+                    textmeshgroup.type = "text_content"
+                    textmeshgroup.name = "text"+(index + 1)
+                    textmeshgroup.add(textMesh)
+                    this.mainModel.add( textmeshgroup );
+                    this.textGroup.push(textMesh)
+
+
+                })
+
+                // let textmeshgroup5 = new THREE.Group()
+                // let textMesh5 = new THREE.Mesh(textmesh5geometry , new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textmeshgroup5.position.set(this.planeArr[4].position.x,(this.planeArr[4].position.y + 105),this.planeArr[4].position.z)
+                // //textMesh5.rotation.set(0.140,-0.120,-12.560)
+                // textmeshgroup5.rotation.y = -1.4 + 4 * 0.4;
+                // textmeshgroup5.scale.set(0.18,0.18,0.18)
+                // textmeshgroup5.type = "text_content"
+                // textmeshgroup5.name = "text5"
+                // textmeshgroup5.add(textMesh5)
+                // this.mainModel.add( textmeshgroup5 );
+
+
+
+                // let textmeshgroup4 = new THREE.Group()
+                // let textMesh5 = new THREE.Mesh(textmesh5geometry , new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textmeshgroup5.position.set(this.planeArr[4].position.x,(this.planeArr[4].position.y + 105),this.planeArr[4].position.z)
+                // //textMesh5.rotation.set(0.140,-0.120,-12.560)
+                // textmeshgroup5.rotation.y = -1.4 + 4 * 0.4;
+                // textmeshgroup5.scale.set(0.18,0.18,0.18)
+                // textmeshgroup5.type = "text_content"
+                // textmeshgroup5.name = "text5"
+                // textmeshgroup5.add(textMesh5)
+                // this.mainModel.add( textmeshgroup5 );
+
+
+
+                // let textmeshgroup6 = new THREE.Group()
+                // let textMesh4 = new THREE.Mesh( new TextGeometry( "text4", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textMesh4.name = "text4"
+
+
+                // textmeshgroup.position.set(this.planeArr[3].position.x,(this.planeArr[3].position.y + 105),this.planeArr[3].position.z)
+                // textMesh4.rotation.y = -1.4 + 3 * 0.4;
+                // textMesh4.scale.set(0.18,0.18,0.18)
+                // textMesh4.type = "text_content"
+                // this.mainModel.add( textMesh4 );
+
+                // let textMesh3 = new THREE.Mesh( new TextGeometry( "text3", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textMesh3.name = "text3"
+                // textMesh3.position.set(211.410,262.890,-389.250)
+                // textMesh3.rotation.y = -1.4 + 2 * 0.4;
+                // textMesh3.scale.set(0.18,0.18,0.18)
+                // textMesh3.type = "text_content"
+                // this.mainModel.add( textMesh3 );
+
+                // let textMesh2 = new THREE.Mesh( new TextGeometry( "text2", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textMesh2.name = "text2"
+                // textMesh2.position.set(332.010,255.460,-274.350)
+                // textMesh2.rotation.y = -1.4 + 1 * 0.4;
+                // textMesh2.scale.set(0.18,0.18,0.18)
+                // textMesh2.type = "text_content"
+
+                // this.mainModel.add( textMesh2 );
+
+                // let textMesh1 = new THREE.Mesh( new TextGeometry( "text1", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
+                // textMesh1.name = "text1"
+                // textMesh1.position.set(408.260,252.340,-113.220)
+                // textMesh1.rotation.y = -1.4 + 0 * 0.4;
+                // textMesh1.scale.set(0.18,0.18,0.18)
+                // this.mainModel.add( textMesh1 );
+                // textMesh1.type = "text_content"
+                // this.mainModel.add( textMesh1 );
+
 
             },
     
@@ -170,7 +245,7 @@ class CanvasComponent extends React.Component {
         this.totalGroup = new THREE.Group(); 
         this.droneGroup = new THREE.Group(); 
         this.textGroup = []
-
+        this.planeArr = []
         this.scene = new THREE.Scene()
         this.meshArr =[];
         this.dTime = 0;
@@ -469,6 +544,13 @@ class CanvasComponent extends React.Component {
         this.mainModel.add(plane2)
         this.mainModel.add(plane3)
         this.mainModel.add(plane4)
+
+
+        this.planeArr.push(plane)
+        this.planeArr.push(plane1)
+        this.planeArr.push(plane2)
+        this.planeArr.push(plane3)
+        this.planeArr.push(plane4)
 
         // this.meshArr.push(plane)
         // this.totalGroup.add( plane );
@@ -803,7 +885,7 @@ class CanvasComponent extends React.Component {
 
             if(child.type === "text_content") {
 
-                 console.log("child.name",child.type)
+                console.log("child.name",child)
 
                 if( child.name ===type) {
 
@@ -811,48 +893,14 @@ class CanvasComponent extends React.Component {
 
                     let updatedgeometry =  new TextGeometry( val, fontobj );
                     updatedgeometry.computeBoundingBox();
-                    child.geometry = updatedgeometry
-    
-    
-                }
-    
-                if( child.name === type) {
-    
-
-
-                    let updatedgeometry =  new TextGeometry( val, fontobj );
+                    const centerOffset = - 0.2 * ( updatedgeometry.boundingBox.max.x - updatedgeometry.boundingBox.min.x );
                     updatedgeometry.computeBoundingBox();
-                    child.geometry = updatedgeometry
-
-
-                }
-    
-                if( child.name === type) {
-
-                    let updatedgeometry =  new TextGeometry( val, fontobj );
-                    updatedgeometry.computeBoundingBox();
-                    child.geometry = updatedgeometry
-    
-                    
-                }
-    
-                if( child.name === type) {
-    
-
-                    let updatedgeometry =  new TextGeometry( val, fontobj );
-                    updatedgeometry.computeBoundingBox();
-                    child.geometry = updatedgeometry
+                    child.children[0].geometry = updatedgeometry
+                    child.children[0].position.x = centerOffset;
     
                 }
     
-                if( child.name === type) {
-
-                    let updatedgeometry =  new TextGeometry( val, fontobj );
-                    updatedgeometry.computeBoundingBox();
-                    child.geometry = updatedgeometry
-    
-    
-                }
+             
 
 
             }
