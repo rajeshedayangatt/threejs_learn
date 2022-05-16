@@ -154,68 +154,7 @@ class CanvasComponent extends React.Component {
 
                 })
 
-                // let textmeshgroup5 = new THREE.Group()
-                // let textMesh5 = new THREE.Mesh(textmesh5geometry , new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textmeshgroup5.position.set(this.planeArr[4].position.x,(this.planeArr[4].position.y + 105),this.planeArr[4].position.z)
-                // //textMesh5.rotation.set(0.140,-0.120,-12.560)
-                // textmeshgroup5.rotation.y = -1.4 + 4 * 0.4;
-                // textmeshgroup5.scale.set(0.18,0.18,0.18)
-                // textmeshgroup5.type = "text_content"
-                // textmeshgroup5.name = "text5"
-                // textmeshgroup5.add(textMesh5)
-                // this.mainModel.add( textmeshgroup5 );
-
-
-
-                // let textmeshgroup4 = new THREE.Group()
-                // let textMesh5 = new THREE.Mesh(textmesh5geometry , new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textmeshgroup5.position.set(this.planeArr[4].position.x,(this.planeArr[4].position.y + 105),this.planeArr[4].position.z)
-                // //textMesh5.rotation.set(0.140,-0.120,-12.560)
-                // textmeshgroup5.rotation.y = -1.4 + 4 * 0.4;
-                // textmeshgroup5.scale.set(0.18,0.18,0.18)
-                // textmeshgroup5.type = "text_content"
-                // textmeshgroup5.name = "text5"
-                // textmeshgroup5.add(textMesh5)
-                // this.mainModel.add( textmeshgroup5 );
-
-
-
-                // let textmeshgroup6 = new THREE.Group()
-                // let textMesh4 = new THREE.Mesh( new TextGeometry( "text4", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textMesh4.name = "text4"
-
-
-                // textmeshgroup.position.set(this.planeArr[3].position.x,(this.planeArr[3].position.y + 105),this.planeArr[3].position.z)
-                // textMesh4.rotation.y = -1.4 + 3 * 0.4;
-                // textMesh4.scale.set(0.18,0.18,0.18)
-                // textMesh4.type = "text_content"
-                // this.mainModel.add( textMesh4 );
-
-                // let textMesh3 = new THREE.Mesh( new TextGeometry( "text3", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textMesh3.name = "text3"
-                // textMesh3.position.set(211.410,262.890,-389.250)
-                // textMesh3.rotation.y = -1.4 + 2 * 0.4;
-                // textMesh3.scale.set(0.18,0.18,0.18)
-                // textMesh3.type = "text_content"
-                // this.mainModel.add( textMesh3 );
-
-                // let textMesh2 = new THREE.Mesh( new TextGeometry( "text2", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textMesh2.name = "text2"
-                // textMesh2.position.set(332.010,255.460,-274.350)
-                // textMesh2.rotation.y = -1.4 + 1 * 0.4;
-                // textMesh2.scale.set(0.18,0.18,0.18)
-                // textMesh2.type = "text_content"
-
-                // this.mainModel.add( textMesh2 );
-
-                // let textMesh1 = new THREE.Mesh( new TextGeometry( "text1", fontobj ), new THREE.MeshStandardMaterial( { color: 'green'} ) );
-                // textMesh1.name = "text1"
-                // textMesh1.position.set(408.260,252.340,-113.220)
-                // textMesh1.rotation.y = -1.4 + 0 * 0.4;
-                // textMesh1.scale.set(0.18,0.18,0.18)
-                // this.mainModel.add( textMesh1 );
-                // textMesh1.type = "text_content"
-                // this.mainModel.add( textMesh1 );
+            
 
 
             },
@@ -267,18 +206,44 @@ class CanvasComponent extends React.Component {
         this.droneWings = [];
         
         //Lighting
-        this.hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-        this.hemiLight.position.set( 0, 200, 0 );
-        this.scene.add( this.hemiLight );
+        // this.hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+        // this.hemiLight.position.set( 0, 200, 0 );
+        // this.scene.add( this.hemiLight );
 
-        this.ambientLight = new THREE.AmbientLight(0xCCFFFF, 0.8); 
+        this.ambientLight = new THREE.AmbientLight(0xCDF9F9, 2.1); 
+        this.ambientLight.intensity = 1.720
+
+        
         this.scene.add(this.ambientLight);
+
+
+
+        const light = new THREE.DirectionalLight( 0xCDF9F9, 0.26 );
+        light.intensity = 0.390
+        light.position.set( -7.620,8.560,5.510 ); //default; light shining from top
+        light.castShadow = true; // default false
+        light.shadow.mapSize.width = 512; // default
+        light.shadow.mapSize.height = 512; // default
+        light.shadow.camera.near = 0.5; // default
+        light.shadow.camera.far = 500; // default
+       
+        this.scene.add( light );
+
+        //Create a PointLight and turn on shadows for the light
+        const light2 = new THREE.PointLight( 0xffffff, 1, 100 );
+        light2.position.set( 0, 10, 4 );
+        light2.castShadow = true; // default false
+        //this.scene.add( light2 );
+
 
         //Render
         this.renderer = new THREE.WebGLRenderer( { antialias: true } );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( this.renderer.domElement );
         this.renderer.setClearColor(0xFFFFFF, 1);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
 
         //controller
         this.orbitControl = new OrbitControls( this.camera, this.renderer.domElement );
@@ -667,6 +632,12 @@ class CanvasComponent extends React.Component {
             '/drone_test.fbx',
             (object) => {
 
+                object.traverse(child => {
+                    child.castShadow = true;
+                    child.receiveShadow = false;
+                })
+
+
                object.scale.set(5, 5, 5)
                object.position.set(this.droneStartingPositionX, this.droneStartingPositionY, this.droneStartingPositionZ);
                console.log(object);
@@ -735,10 +706,34 @@ class CanvasComponent extends React.Component {
   
                 object.scale.set(.02, .02, .02)
                 object.position.y = -1.8
+                object.receiveShadow = true;
+
+                object.traverse(child => {
+
+                    if(child.name == "Floor_white"){
+
+                        child.receiveShadow = true;
+                        child.castShadow = false;
+
+                    }else{
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    // if(child.name === "Blue" && child.name === "Yellow" && child.name === "chair" ) {
+
+                        
+                    //     child.castShadow = true;
+                    //     child.receiveShadow = false;
+                    // }
+              
+                })
+
                 this.mainModel = object;
                 
                 this.totalGroup.add(this.mainModel)
-
                 this.loadDrone();
                 this.loadTexturePlanes();
                 this.loadText();
