@@ -208,8 +208,8 @@ class CanvasComponent extends React.Component {
         //camera
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.001, 100);
 
-		this.camera.position.set(0.1, 0, 0);
-        //this.camera.position.set(0, 0, -0.2);
+		//this.camera.position.set(0.1, 0, 0);
+        this.camera.position.set(0, 0, -0.2);
         this.droneWings = [];
         
         this.gui = new GUI()
@@ -226,8 +226,8 @@ class CanvasComponent extends React.Component {
         this.light.castShadow = true; // default false
         this.light.shadow.mapSize.width = 1024; // default
         this.light.shadow.mapSize.height = 1024 ; // default
-        this.light.shadow.camera.near = 1 // default
-        this.light.shadow.camera.far = 1000; // default
+        this.light.shadow.camera.near = 0.5 // default
+        this.light.shadow.camera.far = 500; // default
         this.light.shadow.needsUpdate = true
         this.scene.add( this.light );
 
