@@ -206,7 +206,7 @@ class CanvasComponent extends React.Component {
         this.fontvar = null;
 
         //camera
-        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.001, 100);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 100);
 
 		//this.camera.position.set(0.1, 0, 0);
         this.camera.position.set(0, 0, -0.2);
