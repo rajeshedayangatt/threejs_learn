@@ -43,7 +43,7 @@ class CanvasComponent extends React.Component {
        // this.loadDrone();
         this.loadViewPoints();
 
-        this.totalGroup.scale.set(0.4,0.4,0.4)
+       //this.totalGroup.scale.set(0.5,0.5,0.5)
 
         console.log(this.totalGroup)
         this.animate();
@@ -206,8 +206,10 @@ class CanvasComponent extends React.Component {
         this.fontvar = null;
 
         //camera
-        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100);
-        this.camera.position.set(0, 0, -0.2);
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.001, 100);
+
+		this.camera.position.set(0.1, 0, 0);
+        //this.camera.position.set(0, 0, -0.2);
         this.droneWings = [];
         
         this.gui = new GUI()
@@ -220,12 +222,12 @@ class CanvasComponent extends React.Component {
 
         this.light = new THREE.DirectionalLight( 0xCCFFFF, 1.230);
         // this.light.intensity =0.2
-        this.light.position.set( -5.000,7.960,4.920); //default; light shining from top
+        this.light.position.set( -6.180,6.880,5.130); //default; light shining from top
         this.light.castShadow = true; // default false
         this.light.shadow.mapSize.width = 1024; // default
         this.light.shadow.mapSize.height = 1024 ; // default
-        this.light.shadow.camera.near = 0.5 // default
-        this.light.shadow.camera.far = 500; // default
+        this.light.shadow.camera.near = 1 // default
+        this.light.shadow.camera.far = 1000; // default
         this.light.shadow.needsUpdate = true
         this.scene.add( this.light );
 
@@ -402,6 +404,8 @@ class CanvasComponent extends React.Component {
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         let raycaster = new THREE.Raycaster();
         raycaster.setFromCamera( mouse, this.camera );
+
+
         let intersects = raycaster.intersectObjects( this.meshArr )[0];
       
         if (intersects && intersects.object) {
@@ -429,15 +433,23 @@ class CanvasComponent extends React.Component {
             }else{
 
 
+
+                console.log("camera",this.camera.position)
+
                   // intersects.object.material.color.setClearColor( "#0000ff" );
                   let posObj = intersects.object.position,
+            
                   posTarget = {x:-posObj.x, z:-posObj.z},
                   posTotal = this.totalGroup.position;
+                  console.log("posObj",posObj)
+                  console.log("posTotal",posTotal)
                   this.dTime = this.transTime; 
                   this.dPos = {
-                      x: (posTotal.x - posTarget.x)/this.transTime,
-                      z:(posTotal.z - posTarget.z)/ this.transTime
+                      x: ((posTotal.x + 0.1) - posTarget.x)/this.transTime,
+                      z:((posTotal.z + 0.1) - posTarget.z)/ this.transTime
                   };
+
+                  
             }
         }
       }
@@ -709,7 +721,7 @@ class CanvasComponent extends React.Component {
 
                 object.traverse(child => {
 
-                    if(child.name == "Floor_White") {
+                    if(child.name == "Floor_White"  ) {
                         console.log("smodel",child.material.reflectivity)
 
                         child.material.shininess = 0.2
@@ -765,14 +777,16 @@ class CanvasComponent extends React.Component {
     renderScene = () => {
 
 
-        this.camera.lookAt( 0, 0, 0 );
+        //this.camera.lookAt( this.camera.position.x, 0, this.camera.position.z );
         this.camera.updateProjectionMatrix()
         this.orbitControl.update();
 
         if (this.dTime > 0) {
             this.dTime--;
-            this.totalGroup.position.x -= this.dPos.x;
-            this.totalGroup.position.z -= this.dPos.z;
+            this.totalGroup.position.x -= this.dPos.x 
+            this.totalGroup.position.z -= this.dPos.z 
+            
+            console.log(this.totalGroup.position)
         }
 
 
