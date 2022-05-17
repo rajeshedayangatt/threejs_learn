@@ -213,24 +213,17 @@ class CanvasComponent extends React.Component {
         this.gui = new GUI()
 
 
-        this.ambientLight = new THREE.AmbientLight(0xCCFFFF,  0.8); 
-        this.ambientLight.intensity = 1.270
-        
+        this.ambientLight = new THREE.AmbientLight(0xCCFFFF,  0.8);         
         this.scene.add(this.ambientLight);
 
 
 
-        this.light = new THREE.DirectionalLight( 0xCCFFFF, 0.270);
+        this.light = new THREE.DirectionalLight( 0xCCFFFF, 1.230);
         // this.light.intensity =0.2
         this.light.position.set( -5.000,7.960,4.920); //default; light shining from top
         this.light.castShadow = true; // default false
         this.light.shadow.mapSize.width = 1024; // default
         this.light.shadow.mapSize.height = 1024 ; // default
-        // this.light.shadow.camera.top = 12 // default
-        // this.light.shadow.camera.right = 12 // default
-        // this.light.shadow.camera.bottom = -12 // default
-        // this.light.shadow.camera.left = -12 // default
-        //this.light.shadow.radius = 10
         this.light.shadow.camera.near = 0.5 // default
         this.light.shadow.camera.far = 500; // default
         this.light.shadow.needsUpdate = true
@@ -240,6 +233,7 @@ class CanvasComponent extends React.Component {
         //this.gui.add(this.light,'shadow')
 
 
+        
         //Render
         this.renderer = new THREE.WebGLRenderer( { antialias: true } );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -715,7 +709,21 @@ class CanvasComponent extends React.Component {
 
                 object.traverse(child => {
 
+                    if(child.name == "Floor_White") {
+                        console.log("smodel",child.material.reflectivity)
 
+                        child.material.shininess = 0.2
+                        child.material.reflectivity = 0.5
+                        child.material.metalness = 0.2
+                        child.material.roughness = 1.2
+
+                        child.material.needsUpdate = true
+                        console.log("smodel",child.material.reflectivity)
+
+                    }
+
+
+                    //child.material.shininess = 20
                     child.castShadow = true;
                     child.receiveShadow = true;
                     // if(child.name === "Blue" && child.name === "Yellow" && child.name === "chair" ) {
