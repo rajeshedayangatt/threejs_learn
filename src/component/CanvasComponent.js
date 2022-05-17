@@ -722,34 +722,30 @@ class CanvasComponent extends React.Component {
                 object.traverse(child => {
 
                     if(child.name == "Floor_White"  ) {
-                        console.log("smodel",child.material.reflectivity)
 
-                        child.material.shininess = 0.2
-                        child.material.reflectivity = 0.5
-                        child.material.metalness = 0.2
-                        child.material.roughness = 1.2
-
-                        child.material.needsUpdate = true
-                        console.log("smodel",child.material.reflectivity)
-
-                    }
-
-                    if(child.name == "Yellow"  ) {
                         child.material.shininess = 0.2
                         child.material.needsUpdate = true
 
                     }
 
+                    if(child.name == "Yellow") {
+                        child.material.shininess = 0.2
+                        child.material.needsUpdate = true
 
-                    //child.material.shininess = 20
+                    }
+                    if( child.name == "chair" ) {
+
+                        child.material.shininess = 0.2
+                        child.material.needsUpdate = true
+                    }
+                    if( child.name == "Blue" ) {
+
+                        child.material.shininess = 0.2
+                        child.material.needsUpdate = true
+                    }
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    // if(child.name === "Blue" && child.name === "Yellow" && child.name === "chair" ) {
 
-                        
-                    //     child.castShadow = true;
-                    //     child.receiveShadow = false;
-                    // }
               
                 })
 
