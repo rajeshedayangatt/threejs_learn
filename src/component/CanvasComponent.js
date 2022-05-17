@@ -6,6 +6,7 @@ import * as $ from 'jquery'
 import { cubeimg } from "../urls";
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import GUI from 'lil-gui'; 
 
 import Modal from 'react-bootstrap/Modal';
 import RandomImageComponent from "./RandomImageComponent";
@@ -41,6 +42,10 @@ class CanvasComponent extends React.Component {
         this.loadModel();
        // this.loadDrone();
         this.loadViewPoints();
+
+        this.totalGroup.scale.set(0.4,0.4,0.4)
+
+        console.log(this.totalGroup)
         this.animate();
 
     }
@@ -205,35 +210,34 @@ class CanvasComponent extends React.Component {
         this.camera.position.set(0, 0, -0.2);
         this.droneWings = [];
         
-        //Lighting
-        // this.hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-        // this.hemiLight.position.set( 0, 200, 0 );
-        // this.scene.add( this.hemiLight );
+        this.gui = new GUI()
 
-        this.ambientLight = new THREE.AmbientLight(0xCDF9F9, 2.1); 
-        this.ambientLight.intensity = 1.720
 
+        this.ambientLight = new THREE.AmbientLight(0xCCFFFF,  0.8); 
+        this.ambientLight.intensity = 1.270
         
         this.scene.add(this.ambientLight);
 
 
 
-        const light = new THREE.DirectionalLight( 0xCDF9F9, 0.26 );
-        light.intensity = 0.390
-        light.position.set( -7.620,8.560,5.510 ); //default; light shining from top
-        light.castShadow = true; // default false
-        light.shadow.mapSize.width = 512; // default
-        light.shadow.mapSize.height = 512; // default
-        light.shadow.camera.near = 0.5; // default
-        light.shadow.camera.far = 500; // default
-       
-        this.scene.add( light );
+        this.light = new THREE.DirectionalLight( 0xCCFFFF, 0.270);
+        // this.light.intensity =0.2
+        this.light.position.set( -5.000,7.960,4.920); //default; light shining from top
+        this.light.castShadow = true; // default false
+        this.light.shadow.mapSize.width = 1024; // default
+        this.light.shadow.mapSize.height = 1024 ; // default
+        // this.light.shadow.camera.top = 12 // default
+        // this.light.shadow.camera.right = 12 // default
+        // this.light.shadow.camera.bottom = -12 // default
+        // this.light.shadow.camera.left = -12 // default
+        //this.light.shadow.radius = 10
+        this.light.shadow.camera.near = 0.5 // default
+        this.light.shadow.camera.far = 500; // default
+        this.light.shadow.needsUpdate = true
+        this.scene.add( this.light );
 
-        //Create a PointLight and turn on shadows for the light
-        const light2 = new THREE.PointLight( 0xffffff, 1, 100 );
-        light2.position.set( 0, 10, 4 );
-        light2.castShadow = true; // default false
-        //this.scene.add( light2 );
+      //  this.gui.add(this.ambientLight,'intensity').min(0).max(100).step(0.001)
+        //this.gui.add(this.light,'shadow')
 
 
         //Render
@@ -247,11 +251,12 @@ class CanvasComponent extends React.Component {
 
         //controller
         this.orbitControl = new OrbitControls( this.camera, this.renderer.domElement );
-        this.orbitControl.target.set(0, 0, 0);
         this.orbitControl.enableDamping = true;
-        this.orbitControl.maxDistance = 4; //  this.controls.minDistance = 1;
-        this.orbitControl.enablePan = false;
-        // this.orbitControl.maxPolarAngle = Math.PI / 2 + 0.4;
+		this.orbitControl.maxDistance = 4; //  this.controls.minDistance = 1;
+		this.orbitControl.enablePan = false;
+		this.orbitControl.maxPolarAngle = Math.PI - 0.4;
+		this.orbitControl.minPolarAngle = 0.2;
+        //this.orbitControl.maxPolarAngle = Math.PI / 2 + 0.4;
 
 
         //world image load
@@ -706,19 +711,10 @@ class CanvasComponent extends React.Component {
   
                 object.scale.set(.02, .02, .02)
                 object.position.y = -1.8
-                object.receiveShadow = true;
+                //object.receiveShadow = true;
 
                 object.traverse(child => {
 
-                    if(child.name == "Floor_white"){
-
-                        child.receiveShadow = true;
-                        child.castShadow = false;
-
-                    }else{
-                        child.castShadow = true;
-                        child.receiveShadow = true;
-                    }
 
                     child.castShadow = true;
                     child.receiveShadow = true;
@@ -734,6 +730,7 @@ class CanvasComponent extends React.Component {
                 this.mainModel = object;
                 
                 this.totalGroup.add(this.mainModel)
+
                 this.loadDrone();
                 this.loadTexturePlanes();
                 this.loadText();
