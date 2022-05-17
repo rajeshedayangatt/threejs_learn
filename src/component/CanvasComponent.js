@@ -734,6 +734,12 @@ class CanvasComponent extends React.Component {
 
                     }
 
+                    if(child.name == "Yellow"  ) {
+                        child.material.shininess = 0.2
+                        child.material.needsUpdate = true
+
+                    }
+
 
                     //child.material.shininess = 20
                     child.castShadow = true;
@@ -777,7 +783,7 @@ class CanvasComponent extends React.Component {
     renderScene = () => {
 
 
-        //this.camera.lookAt( this.camera.position.x, 0, this.camera.position.z );
+        this.camera.lookAt( 0,0,0 );
         this.camera.updateProjectionMatrix()
         this.orbitControl.update();
 
