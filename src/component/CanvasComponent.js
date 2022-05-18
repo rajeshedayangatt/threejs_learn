@@ -43,9 +43,8 @@ class CanvasComponent extends React.Component {
        // this.loadDrone();
         this.loadViewPoints();
 
-       //this.totalGroup.scale.set(0.5,0.5,0.5)
+       
 
-        console.log(this.totalGroup)
         this.animate();
 
     }
@@ -82,7 +81,6 @@ class CanvasComponent extends React.Component {
         // textMesh1.rotation.y = Math.PI * 2;
 
         textMesh1.scale.set(0.2,0.2,0.2)
-        console.log(this.totalGroup)
 
         this.totalGroup.add( textMesh1 );
     }
@@ -112,7 +110,6 @@ class CanvasComponent extends React.Component {
 
                 this.planeArr.forEach((val,index) => {
 
-                    console.log(val.name)
 
                     let textmeshgroup = new THREE.Group()
                     let textmeshgeometry = new TextGeometry( "text"+index, fontobj )
@@ -205,6 +202,8 @@ class CanvasComponent extends React.Component {
         this.dronpos = "";
         this.fontvar = null;
 
+        this.currentIntersectPos = new THREE.Vector3(0,0,0)
+
         //camera
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 100);
 
@@ -231,11 +230,6 @@ class CanvasComponent extends React.Component {
         this.light.shadow.needsUpdate = true
         this.scene.add( this.light );
 
-      //  this.gui.add(this.ambientLight,'intensity').min(0).max(100).step(0.001)
-        //this.gui.add(this.light,'shadow')
-
-
-        
         //Render
         this.renderer = new THREE.WebGLRenderer( { antialias: true } );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -406,7 +400,10 @@ class CanvasComponent extends React.Component {
         raycaster.setFromCamera( mouse, this.camera );
 
 
+        
         let intersects = raycaster.intersectObjects( this.meshArr )[0];
+
+        console.log("intersects",intersects)
       
         if (intersects && intersects.object) {
 
@@ -433,26 +430,24 @@ class CanvasComponent extends React.Component {
             }else{
 
 
+                this.currentIntersectPos = intersects.point;
+                let posTarget = {x:this.currentIntersectPos.x, z:this.currentIntersectPos.z};
 
-                console.log("camera",this.camera.position)
+                // intersects.object.material.color.setClearColor( "#0000ff" );
+                //let posObj = intersects.object.position,
+                // posTarget = {x:-posObj.x, z:-posObj.z},
+                // posTotal = this.totalGroup.position;
+                this.dTime = this.transTime; 
+                this.dPos = {
+                    x: (posTarget.x)/this.transTime,
+                    z:(posTarget.z)/ this.transTime
+                };
 
-                  // intersects.object.material.color.setClearColor( "#0000ff" );
-                  let posObj = intersects.object.position,
-            
-                  posTarget = {x:-posObj.x, z:-posObj.z},
-                  posTotal = this.totalGroup.position;
-                  console.log("posObj",posObj)
-                  console.log("posTotal",posTotal)
-                  this.dTime = this.transTime; 
-                  this.dPos = {
-                      x: ((posTotal.x + 0.1) - posTarget.x)/this.transTime,
-                      z:((posTotal.z + 0.1) - posTarget.z)/ this.transTime
-                  };
-
-                  
             }
         }
-      }
+    }
+
+    
 
     loadTexturePlanes = () => {
 
@@ -651,8 +646,8 @@ class CanvasComponent extends React.Component {
 
                object.scale.set(5, 5, 5)
                object.position.set(this.droneStartingPositionX, this.droneStartingPositionY, this.droneStartingPositionZ);
-               console.log(object);
-                
+
+               
                 this.droneObj = object
 
 
@@ -753,6 +748,8 @@ class CanvasComponent extends React.Component {
                 
                 this.totalGroup.add(this.mainModel)
 
+
+                this.totalGroup.scale.set(0.5,0.5,0.5)
                 this.loadDrone();
                 this.loadTexturePlanes();
                 this.loadText();
@@ -783,14 +780,14 @@ class CanvasComponent extends React.Component {
         this.camera.updateProjectionMatrix()
         this.orbitControl.update();
 
-        if (this.dTime > 0) {
-            this.dTime--;
-            this.totalGroup.position.x -= this.dPos.x 
-            this.totalGroup.position.z -= this.dPos.z 
-            
-            console.log(this.totalGroup.position)
-        }
+       // 
 
+         if (this.dTime > 0) {
+             this.dTime--;
+             this.totalGroup.position.x -= this.dPos.x 
+             this.totalGroup.position.z -= this.dPos.z 
+
+         }
 
 
         if(this.dronpos == "") {
@@ -861,7 +858,6 @@ class CanvasComponent extends React.Component {
             this.droneObj.position.set(this.droneStartingPositionX, this.droneStartingPositionY, this.droneStartingPositionZ);
             this.droneObj.rotation.y += 0.003;
 
-           // console.log("pos",this.droneObj.position)
         }
 
 
@@ -892,7 +888,6 @@ class CanvasComponent extends React.Component {
 
             if(child.type === "text_content") {
 
-                console.log("child.name",child)
 
                 if( child.name ===type) {
 
@@ -937,7 +932,6 @@ class CanvasComponent extends React.Component {
 
                 child.needsUpdate=true;
 
-                console.log(child)
     
             }
 
@@ -971,7 +965,6 @@ class CanvasComponent extends React.Component {
                 child.needsUpdate=true;
                 child.visible = true
 
-                console.log(child)
     
             }
 
@@ -985,7 +978,6 @@ class CanvasComponent extends React.Component {
                 child.needsUpdate=true;
                 child.visible = true
 
-                console.log(child)
     
             }
 
@@ -1002,7 +994,6 @@ class CanvasComponent extends React.Component {
                 child.material.needsUpdate=true;
                 child.geometry.uvsNeedUpdate = true;
                 child.needsUpdate=true;
-                console.log(child)
     
             }
         })
